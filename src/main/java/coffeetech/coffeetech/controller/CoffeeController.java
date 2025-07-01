@@ -8,6 +8,7 @@ import coffeetech.coffeetech.jwt.JwtTokenProvider;
 import coffeetech.coffeetech.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -18,9 +19,13 @@ public class CoffeeController {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final BCryptPasswordEncoder passwordEncoder;
 
+
+    // 회원 가입 컨트롤러입니다.
     @PostMapping("/coffee/signup")
-    public ResponseEntity<?>signup(@RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<?> signup(@RequestBody SignupRequestDto signupRequestDto) {
+        // 이메일 중복 확인 코드
         boolean userExists = userRepository.findByEmail(signupRequestDto.getEmail()).isPresent();
         if (userExists) {
             return ResponseEntity.status(409).body(
@@ -29,11 +34,35 @@ public class CoffeeController {
             );
         }
 
+        // 비밀번호 확인 불일치 검사 코드
+        if (!signupRequestDto.getPassword().equals(signupRequestDto.getConfirmPassword())) {
+            return ResponseEntity.status(409).body(
+                    Map.of("status", "fail",
+                            "message", "비밀번호와 비밀번호 확인이 일치하지 않습니다.")
+            );
+        }
+
+        // 비밀번호 조건 정규식 검증 코드
+        String password = signupRequestDto.getPassword();
+        if (!isValidPassword(password)) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("status", "fail",
+                            "message", "비밀번호는 8자리 이상이며, 영문/숫자/특수문자를 모두 포함해야 합니다.")
+            );
+        }
+
+        // 별명 조건 정규식 검증 코드
+        if (!isValidNickname(signupRequestDto.getNickname())) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("status", "fail",
+                            "message", "닉네임은 국문 2~5자 또는 영문/숫자 3~7자만 사용할 수 있습니다.")
+            );
+        }
+
         User user = new User();
         user.setEmail(signupRequestDto.getEmail());
-        user.setPassword(signupRequestDto.getPassword());
+        user.setPassword(passwordEncoder.encode(password));
         user.setNickname(signupRequestDto.getNickname());
-        user.setAge(signupRequestDto.getAge());
 
         userRepository.save(user);
 
@@ -41,6 +70,25 @@ public class CoffeeController {
                 "status", "success",
                 "message", "회원가입 완료"
         ));
+    }
+
+    // 비밀번호 유효성 체크 코드
+    private boolean isValidPassword(String password) {
+        String regex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*()\\-_=+{};:,<.>]).{8,}$";
+        return password != null && password.matches(regex);
+    }
+
+    // 별명 유효성 체크 코드
+    private boolean isValidNickname(String nickname) {
+        if (nickname == null) return false;
+
+        // 국문: 2~5자, 한글만
+        if (nickname.matches("^[가-힣]{2,5}$")) return true;
+
+        // 영문: 3~7자, 알파벳만 (대소문자), 숫자 포함 가능
+        if (nickname.matches("^[a-zA-Z0-9]{3,7}$")) return true;
+
+        return false;
     }
 
 
