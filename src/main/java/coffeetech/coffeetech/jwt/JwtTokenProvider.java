@@ -14,10 +14,10 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private final Key secretKey = Keys.hmacShaKeyFor("mysecretkeymysecretkeymysecretkeymysecretkey".getBytes());
-    private final long accessTokenValidity = 1000L * 60 * 60 * 3;
 
     public String generateToken(String email) {
         Date now = new Date();
+        long accessTokenValidity = 1000L * 60 * 60 * 3;
         Date expiry = new Date(now.getTime() + accessTokenValidity);
 
         return Jwts.builder()
