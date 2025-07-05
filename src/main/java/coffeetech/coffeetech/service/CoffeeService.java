@@ -5,6 +5,7 @@ import coffeetech.coffeetech.entity.Attend;
 import coffeetech.coffeetech.entity.CoffeeConsumption;
 import coffeetech.coffeetech.entity.User;
 import coffeetech.coffeetech.repository.AttendRepository;
+import coffeetech.coffeetech.repository.CoffeeConsumptionRepository;
 import coffeetech.coffeetech.repository.CoffeeRepository;
 import coffeetech.coffeetech.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class CoffeeService {
     private final CoffeeRepository coffeeRepository;
     private final UserRepository userRepository;
     private final AttendRepository attendRepository;
+    private final CoffeeConsumptionRepository coffeeConsumptionRepository;
 
     public void saveCoffee(CoffeeDto dto, long userId) {
         CoffeeConsumption coffee = new CoffeeConsumption();
@@ -98,5 +101,18 @@ public class CoffeeService {
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
                 .orElse("데이터 없음");
+    }
+
+    public List<CoffeeDto> getCoffeeList(String month, User user) {
+        YearMonth ym = YearMonth.parse(month); // "2025-07"
+        LocalDate start = ym.atDay(1);
+        LocalDate end = ym.atEndOfMonth();
+
+        List<CoffeeConsumption> records =
+                coffeeConsumptionRepository.findByUser_UserIdAndDateBetween(user.getUserId(), start, end);
+
+        return records.stream()
+                .map(CoffeeDto::fromEntity)
+                .collect(Collectors.toList());
     }
 }

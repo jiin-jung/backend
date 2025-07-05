@@ -1,5 +1,6 @@
 package coffeetech.coffeetech.dto;
 
+import coffeetech.coffeetech.entity.CoffeeConsumption;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,4 +12,12 @@ public class CoffeeDto {
     private int quantity;        // 수량 (잔 수)
 
     private long userId;
+
+    public static CoffeeDto fromEntity(CoffeeConsumption entity) {
+        CoffeeDto dto = new CoffeeDto();
+        dto.setCoffeeType(entity.getCoffeeType());
+        dto.setQuantity(entity.getQuantity());
+        dto.setDate(entity.getDate().toString());
+        return dto;
+    }
 }

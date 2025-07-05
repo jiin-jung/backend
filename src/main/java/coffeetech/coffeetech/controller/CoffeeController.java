@@ -124,19 +124,4 @@ public class CoffeeController {
                         "message", "이메일 또는 비밀번호가 틀렸습니다."
                 )));
     }
-
-    @PostMapping("/record")
-    public ResponseEntity<?> recordCoffee(@RequestBody CoffeeDto dto) {
-        try {
-            int authenticatedUserId = 1; // 나중에 JWT 연동 시 자동 추출
-            coffeeService.saveCoffee(dto, authenticatedUserId);
-            return ResponseEntity.ok("커피 소비 기록이 저장되었습니다.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("입력 오류: " + e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("서버 오류: " + e.getMessage());
-        }
-    }
-
-
 }

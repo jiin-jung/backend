@@ -1,6 +1,5 @@
 package coffeetech.coffeetech.repository;
 
-
 import coffeetech.coffeetech.entity.CoffeeConsumption;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
