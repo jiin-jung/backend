@@ -1,29 +1,32 @@
 package coffeetech.coffeetech.controller;
 
 
+import coffeetech.coffeetech.dto.CoffeeDto;
 import coffeetech.coffeetech.dto.LoginRequestDto;
 import coffeetech.coffeetech.dto.SignupRequestDto;
 import coffeetech.coffeetech.entity.User;
 import coffeetech.coffeetech.jwt.JwtTokenProvider;
 import coffeetech.coffeetech.repository.UserRepository;
+import coffeetech.coffeetech.service.CoffeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/coffee")
 public class CoffeeController {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final BCryptPasswordEncoder passwordEncoder;
-
+    private final PasswordEncoder passwordEncoder;
+    private final CoffeeService coffeeService;
 
     // 회원 가입 컨트롤러입니다.
-    @PostMapping("/coffee/signup")
+    @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupRequestDto signupRequestDto) {
         // 이메일 중복 확인 코드
         boolean userExists = userRepository.findByEmail(signupRequestDto.getEmail()).isPresent();
@@ -45,7 +48,7 @@ public class CoffeeController {
         // 비밀번호 조건 정규식 검증 코드
         String password = signupRequestDto.getPassword();
         if (!isValidPassword(password)) {
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(409).body(
                     Map.of("status", "fail",
                             "message", "비밀번호는 8자리 이상이며, 영문/숫자/특수문자를 모두 포함해야 합니다.")
             );
@@ -53,9 +56,15 @@ public class CoffeeController {
 
         // 별명 조건 정규식 검증 코드
         if (!isValidNickname(signupRequestDto.getNickname())) {
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(409).body(
                     Map.of("status", "fail",
                             "message", "닉네임은 국문 2~5자 또는 영문/숫자 3~7자만 사용할 수 있습니다.")
+            );
+        }
+
+        if (!isValidAge(signupRequestDto.getAge())) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("status", "fail", "message", "나이는 양수여야 합니다.")
             );
         }
 
@@ -63,6 +72,7 @@ public class CoffeeController {
         user.setEmail(signupRequestDto.getEmail());
         user.setPassword(passwordEncoder.encode(password));
         user.setNickname(signupRequestDto.getNickname());
+        user.setAge(signupRequestDto.getAge());
 
         userRepository.save(user);
 
@@ -70,6 +80,7 @@ public class CoffeeController {
                 "status", "success",
                 "message", "회원가입 완료"
         ));
+
     }
 
     // 비밀번호 유효성 체크 코드
@@ -86,20 +97,22 @@ public class CoffeeController {
         if (nickname.matches("^[가-힣]{2,5}$")) return true;
 
         // 영문: 3~7자, 알파벳만 (대소문자), 숫자 포함 가능
-        if (nickname.matches("^[a-zA-Z0-9]{3,7}$")) return true;
+        return nickname.matches("^[a-zA-Z0-9]{3,7}$");
+    }
 
-        return false;
+    private boolean isValidAge(int age) {
+        return age > 0;
     }
 
 
-    @PostMapping("/coffee/login")
+    @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequestDto loginRequestDto) {
         return userRepository.findByEmail(loginRequestDto.getEmail())
-                .filter(user -> user.getPassword().equals(loginRequestDto.getPassword()))
+                .filter(user -> passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword()))  // ✅ 여기 중요
                 .map(user -> {
                     String token = jwtTokenProvider.generateToken(user.getEmail());
                     return ResponseEntity.ok().body(
-                            java.util.Map.of(
+                            Map.of(
                                     "status", "success",
                                     "nickname", user.getNickname(),
                                     "token", token
@@ -108,7 +121,7 @@ public class CoffeeController {
                 })
                 .orElse(ResponseEntity.status(401).body(Map.of(
                         "status", "fail",
-                        "message","이메일 또는 비밀번호가 틀렸습니다."
+                        "message", "이메일 또는 비밀번호가 틀렸습니다."
                 )));
     }
 }

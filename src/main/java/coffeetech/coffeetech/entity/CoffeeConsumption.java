@@ -16,7 +16,6 @@ public class CoffeeConsumption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long coffeeId;
 
-    private int price;
     private int quantity;
     private String coffeeType;
     private LocalDate date;

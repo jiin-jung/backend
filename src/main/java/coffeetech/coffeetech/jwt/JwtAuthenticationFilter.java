@@ -23,6 +23,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException{
+
+
         String token = resolveToken(request);
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
@@ -35,6 +37,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 List.of(new SimpleGrantedAuthority("ROLE_USER")) // 또는 user.getRoles()
                         );
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                System.out.println("이메일 토큰 인증 완료: " + email);
             });
         }
 

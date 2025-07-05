@@ -1,28 +1,28 @@
 package coffeetech.coffeetech.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "attend")
+@Table(name = "gifticon")
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Attend {
+@Builder
+public class Gifticon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate date; // yyyy-MM-dd
+    private String itemName;
+    private String brand;
+    private String barcode;
+    private LocalDate expireDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 }
-

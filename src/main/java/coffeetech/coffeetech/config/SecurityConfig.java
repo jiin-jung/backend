@@ -28,7 +28,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/coffee/login","/coffee/signup").permitAll()
+                        .requestMatchers("/api/coffee/login","/api/coffee/signup").permitAll()
+                        .requestMatchers("/api/coffee/attend/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userRepository),UsernamePasswordAuthenticationFilter.class)
