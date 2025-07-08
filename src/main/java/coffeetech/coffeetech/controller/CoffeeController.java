@@ -1,9 +1,9 @@
 package coffeetech.coffeetech.controller;
 
 
-import coffeetech.coffeetech.dto.CoffeeDto;
 import coffeetech.coffeetech.dto.LoginRequestDto;
 import coffeetech.coffeetech.dto.SignupRequestDto;
+import coffeetech.coffeetech.entity.Coffee;
 import coffeetech.coffeetech.entity.User;
 import coffeetech.coffeetech.jwt.JwtTokenProvider;
 import coffeetech.coffeetech.repository.UserRepository;
@@ -13,8 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/coffee")
@@ -62,11 +64,6 @@ public class CoffeeController {
             );
         }
 
-        if (!isValidAge(signupRequestDto.getAge())) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("status", "fail", "message", "나이는 양수여야 합니다.")
-            );
-        }
 
         User user = new User();
         user.setEmail(signupRequestDto.getEmail());
@@ -100,10 +97,14 @@ public class CoffeeController {
         return nickname.matches("^[a-zA-Z0-9]{3,7}$");
     }
 
-    private boolean isValidAge(int age) {
-        return age > 0;
-    }
+    @PostMapping("/check-email")
+    public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        boolean exists = userRepository.findByEmail(email).isPresent();
 
+
+        return ResponseEntity.ok(Map.of("exists", exists));
+    }
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequestDto loginRequestDto) {
@@ -123,5 +124,11 @@ public class CoffeeController {
                         "status", "fail",
                         "message", "이메일 또는 비밀번호가 틀렸습니다."
                 )));
+    }
+
+    @GetMapping("/recent-coffee")
+    public ResponseEntity<List<Coffee>> getRecentCoffeeMenu() {
+        List<Coffee> recentList = coffeeService.getRecentCoffeeMenu();
+        return ResponseEntity.ok(recentList);
     }
 }

@@ -2,6 +2,7 @@ package coffeetech.coffeetech.service;
 
 import coffeetech.coffeetech.dto.CoffeeDto;
 import coffeetech.coffeetech.entity.Attend;
+import coffeetech.coffeetech.entity.Coffee;
 import coffeetech.coffeetech.entity.CoffeeConsumption;
 import coffeetech.coffeetech.entity.User;
 import coffeetech.coffeetech.repository.AttendRepository;
@@ -26,6 +27,10 @@ public class CoffeeService {
     private final AttendRepository attendRepository;
     private final CoffeeConsumptionRepository coffeeConsumptionRepository;
 
+    public List<Coffee> getRecentCoffeeMenu() {
+        return coffeeRepository.findTop10ByOrderByCreatedAtDesc();
+    }
+
     public void saveCoffee(CoffeeDto dto, long userId) {
         CoffeeConsumption coffee = new CoffeeConsumption();
 
@@ -42,7 +47,7 @@ public class CoffeeService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         coffee.setUser(user);
 
-        coffeeRepository.save(coffee);
+        coffeeConsumptionRepository.save(coffee);
 
         if (!attendRepository.existsByUser_UserIdAndDate(user.getUserId(), coffee.getDate())) {
             Attend attend = new Attend();
@@ -66,7 +71,7 @@ public class CoffeeService {
     }
 
     public Map<String, Integer> getDailyCoffeeCounts(String month, int userId) {
-        List<CoffeeConsumption> records = coffeeRepository.findByUserIdAndMonth(userId, month);
+        List<CoffeeConsumption> records = coffeeConsumptionRepository.findByUserIdAndMonth(userId, month);
 
         System.out.println(">>> 조회된 레코드 수: " + records.size());
         for (CoffeeConsumption c : records) {
@@ -84,7 +89,7 @@ public class CoffeeService {
 
     // 2. 해당 월 총 소비 잔수
     public int getMonthlyTotalQuantity(String month, int userId) {
-        return coffeeRepository.findByUserIdAndMonth(userId, month)
+        return coffeeConsumptionRepository.findByUserIdAndMonth(userId, month)
                 .stream()
                 .mapToInt(CoffeeConsumption::getQuantity)
                 .sum();
@@ -92,7 +97,7 @@ public class CoffeeService {
 
     // 3. 가장 자주 마신 메뉴
     public String getMostFrequentCoffeeType(String month, int userId) {
-        List<CoffeeConsumption> records = coffeeRepository.findByUserIdAndMonth(userId, month);
+        List<CoffeeConsumption> records = coffeeConsumptionRepository.findByUserIdAndMonth(userId, month);
         Map<String, Integer> countMap = new HashMap<>();
         for (CoffeeConsumption r : records) {
             countMap.put(r.getCoffeeType(), countMap.getOrDefault(r.getCoffeeType(), 0) + r.getQuantity());

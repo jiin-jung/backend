@@ -17,6 +17,7 @@ public class CoffeeConsumption {
     private Long coffeeId;
 
     private int quantity;
+    @Column(name = "coffee_type", nullable = false)
     private String coffeeType;
     private LocalDate date;
 

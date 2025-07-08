@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/coffee/attend")
@@ -22,8 +23,8 @@ public class AttendController {
 
     // 출석 체크 (오늘 날짜로)
     @PostMapping("/check")
-    public ResponseEntity<String> checkTodayAttend(@RequestParam Long userId) {
-        attendService.checkAttend(userId, LocalDate.now());
+    public ResponseEntity<String> checkTodayAttend(@AuthenticationPrincipal User user) {
+        attendService.checkAttend(user.getUserId(), LocalDate.now());
         return ResponseEntity.ok("출석 체크 완료");
     }
 

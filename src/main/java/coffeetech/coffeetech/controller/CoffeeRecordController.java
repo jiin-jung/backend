@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/coffee")
@@ -27,8 +27,9 @@ public class CoffeeRecordController {
     @PostMapping("/record")
     public ResponseEntity<?> recordCoffee(@RequestBody CoffeeDto dto) {
         try {
-            int authenticatedUserId = 1; // 나중에 JWT 연동 시 자동 추출
-            coffeeService.saveCoffee(dto, authenticatedUserId);
+            //int authenticatedUserId = 1; // 나중에 JWT 연동 시 자동 추출
+            long userId = dto.getUserId();
+            coffeeService.saveCoffee(dto, userId);
             return ResponseEntity.ok("커피 소비 기록이 저장되었습니다.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("입력 오류: " + e.getMessage());
