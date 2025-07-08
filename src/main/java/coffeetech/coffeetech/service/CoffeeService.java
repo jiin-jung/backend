@@ -33,12 +33,15 @@ public class CoffeeService {
 
     public void saveCoffee(CoffeeDto dto, long userId) {
         CoffeeConsumption coffee = new CoffeeConsumption();
+        coffee.setCoffeeType(dto.getCoffeeType());
+        coffee.setQuantity(dto.getQuantity());
 
         try {
             coffee.setDate(LocalDate.parse(dto.getDate())); // 날짜 파싱
         } catch (DateTimeParseException | NullPointerException e) {
             throw new IllegalArgumentException("날짜 형식이 잘못되었거나 누락되었습니다. yyyy-MM-dd 형식으로 입력해주세요.");
         }
+
 
         coffee.setQuantity(dto.getQuantity());
         coffee.setCoffeeType(dto.getCoffeeType());

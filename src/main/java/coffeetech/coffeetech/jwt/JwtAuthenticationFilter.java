@@ -1,6 +1,5 @@
 package coffeetech.coffeetech.jwt;
 
-import coffeetech.coffeetech.entity.User;
 import coffeetech.coffeetech.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -8,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
@@ -21,20 +19,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
 
     private static final List<String> WHITELIST_PREFIXES = List.of(
+            "/",                 // 루트 경로
+            "/index.html",       // index.html
             "/api/coffee/login",
             "/api/coffee/signup",
-            "/api/coffee/check-email"
+            "/api/coffee/check-email",
+            "/static/",          // 정적 파일 경로
+            "/css/",             // CSS 경로
+            "/js/",              // JS 경로
+            "/images/",          // 이미지 경로
+            "/favicon.ico"       // 파비콘
     );
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String path = request.getRequestURI();
         String token = resolveToken(request);
+        String path = request.getRequestURI();
 
-        // 화이트리스트 경로는 필터 패스
-        if (WHITELIST_PREFIXES.stream().anyMatch(path::startsWith)) {
+        System.out.println("요청 경로: " + path);  // 반드시 로그 찍어서 확인
+
+        if (path.equals("/") || WHITELIST_PREFIXES.stream().anyMatch(path::startsWith)) {
             filterChain.doFilter(request, response);
             return;
         }

@@ -1,1 +1,56 @@
 nohup: ignoring input
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :resolveMainClassName UP-TO-DATE
+
+> Task :bootRun
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.3)
+
+2025-07-08T16:23:02.467+09:00  INFO 15512 --- [coffeetech] [           main] c.coffeetech.CoffeetechApplication       : Starting CoffeetechApplication using Java 17.0.15 with PID 15512 (C:\Users\jiinjung\babylion\coffeetech\build\classes\java\main started by jiinjung in C:\Users\jiinjung\babylion\coffeetech)
+2025-07-08T16:23:02.479+09:00  INFO 15512 --- [coffeetech] [           main] c.coffeetech.CoffeetechApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-07-08T16:23:04.718+09:00  INFO 15512 --- [coffeetech] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-07-08T16:23:04.902+09:00  INFO 15512 --- [coffeetech] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 166 ms. Found 6 JPA repository interfaces.
+2025-07-08T16:23:06.927+09:00  INFO 15512 --- [coffeetech] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-07-08T16:23:06.989+09:00  INFO 15512 --- [coffeetech] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-07-08T16:23:06.990+09:00  INFO 15512 --- [coffeetech] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-07-08T16:23:07.131+09:00  INFO 15512 --- [coffeetech] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-07-08T16:23:07.133+09:00  INFO 15512 --- [coffeetech] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4506 ms
+2025-07-08T16:23:07.421+09:00  INFO 15512 --- [coffeetech] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-07-08T16:23:07.500+09:00  INFO 15512 --- [coffeetech] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.18.Final
+2025-07-08T16:23:07.562+09:00  INFO 15512 --- [coffeetech] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-07-08T16:23:08.127+09:00  INFO 15512 --- [coffeetech] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-07-08T16:23:08.195+09:00  INFO 15512 --- [coffeetech] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-07-08T16:23:08.383+09:00  INFO 15512 --- [coffeetech] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.mariadb.jdbc.Connection@58cda03f
+2025-07-08T16:23:08.386+09:00  INFO 15512 --- [coffeetech] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-07-08T16:23:08.431+09:00  WARN 15512 --- [coffeetech] [           main] org.hibernate.orm.deprecation            : HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-07-08T16:23:08.457+09:00  INFO 15512 --- [coffeetech] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 10.6.21
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-07-08T16:23:10.140+09:00  INFO 15512 --- [coffeetech] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-07-08T16:23:10.254+09:00  INFO 15512 --- [coffeetech] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-07-08T16:23:10.858+09:00  INFO 15512 --- [coffeetech] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-07-08T16:23:10.941+09:00  WARN 15512 --- [coffeetech] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-07-08T16:23:12.178+09:00  INFO 15512 --- [coffeetech] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-07-08T16:23:12.209+09:00  INFO 15512 --- [coffeetech] [           main] c.coffeetech.CoffeetechApplication       : Started CoffeetechApplication in 10.896 seconds (process running for 11.802)
+2025-07-08T17:14:17.545+09:00  WARN 15512 --- [coffeetech] [l-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=19m38s581ms25µs400ns).
+2025-07-08T19:13:10.901+09:00  WARN 15512 --- [coffeetech] [l-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=18m18s968ms635µs200ns).
+2025-07-08T20:30:55.908+09:00  WARN 15512 --- [coffeetech] [l-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m43s820ms867µs700ns).
+2025-07-08T22:25:06.516+09:00  WARN 15512 --- [coffeetech] [l-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=27m39s222ms93µs300ns).
+2025-07-08T23:31:22.365+09:00  WARN 15512 --- [coffeetech] [l-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=46m15s551ms885µs800ns).
+
+Daemon registry C:\Users\jiinjung\.gradle\daemon became unreadable. Expiring daemon.
+Daemon will be stopped at the end of the build after the daemon registry became unreadable

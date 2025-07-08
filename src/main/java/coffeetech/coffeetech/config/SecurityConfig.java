@@ -37,14 +37,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/favicon.ico",
+                                "/css/**",
+                                "/js/**",
+                                "/images/**",
                                 "/api/coffee/login",
                                 "/api/coffee/signup",
                                 "/api/coffee/check-email"
                         ).permitAll()
-                        .requestMatchers("/check-email").permitAll()
                         .requestMatchers("/api/coffee/**").authenticated()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()  // 또는 .authenticated()
                 )
+
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userRepository),UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -58,7 +64,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000")); // 프론트 주소
+        config.setAllowedOrigins(List.of("http://52.79.239.162")); // 프론트 주소
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true); // 쿠키, 인증 헤더 포함 시 필요
