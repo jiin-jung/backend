@@ -5,6 +5,7 @@ import coffeetech.coffeetech.dto.MonthlyAttendResponse;
 import coffeetech.coffeetech.entity.User;
 import coffeetech.coffeetech.service.AttendService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/coffee/attend")

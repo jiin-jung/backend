@@ -3,12 +3,14 @@ package coffeetech.coffeetech.controller;
 
 import coffeetech.coffeetech.service.CoffeeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@Slf4j
+@CrossOrigin(origins = "https://babylioninu.netlify.app")
 @RestController
 @RequestMapping("/api/coffee")
 @RequiredArgsConstructor
